@@ -1,0 +1,93 @@
+html {
+    overflow: hidden;
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    overflow: hidden;
+    background: black;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+#viewport {
+    width: 100%; /* Fixed width for your game viewport */
+    height: 600px; /* Fixed height for your game viewport */
+    position: relative; /* Needed for absolute positioning inside */
+    overflow: hidden;
+    zoom: 1.7;
+    background: url("background.jpeg");
+    background-size: auto;
+    background-repeat: no-repeat;
+}
+
+#isometric-grid {
+    /* Adjust width and height based on your grid layout and tile size */
+    transform: rotateX(62deg) rotateZ(45deg);
+    /* Center the grid inside the viewport */
+    transform-origin: center;
+    width: 552px; /* Fixed width for your game viewport */
+    height: 552px; /* Fixed height for your game viewport */
+    position: relative; /* Needed for absolute positioning inside */
+    top: -80px;
+}
+
+.tile {
+    position: absolute;
+    width: 49px; /* Tile width */
+    height: 49px; /* Tile height */
+    /* background-color: rgba(255, 255, 255, 0.8); */
+    background: url("tile6.jpeg");
+    background-size: contain;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 255, 0.3); /* Transparent blue */
+    opacity: 0; /* Start fully transparent */
+    transition: opacity 0.3s ease; /* Smooth transition for the overlay */
+}
+
+.tile:hover .overlay {
+    opacity: 1; /* Fully visible on hover */
+    animation: pulse 1.5s infinite; /* Apply the pulse animation */
+}
+
+@keyframes pulse {
+    0% { 
+        opacity: 0.5; /* Semi-transparent */
+    }
+    50% {
+        opacity: 1; /* Fully visible */
+    }
+    100% {
+        opacity: 0.5; /* Back to semi-transparent */
+    }
+}
+
+.character {
+    /* Previous styles */
+    /* Transformations for isometric alignment */
+    transform: rotateX(315deg) rotateZ(325deg) rotateY(17deg) skewY(354deg);
+    transform-origin: bottom;
+    /* Adjust width and height as necessary */
+    height: 130px;
+    width: 45px;
+}
+
+#characters-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* No transformations here */
+}

@@ -1,0 +1,19 @@
+html {
+    overflow: hidden;
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    overflow: auto;
+}
+
+
+.tile {
+    position: absolute;
+    width: 50px; /* Tile width */
+    height: 50px; /* Tile height */
+    /* background-color: rgba(255, 255, 255, 0.8); */
+    background: url("tile_texture.jpeg");
+    border: 1px solid #ccc;
+}

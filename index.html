@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Isometric Grid</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <div class="center" id="viewport">
+        <div id="isometric-grid"></div>
+    </div>
+    <script src="script.js"></script>
+
+    <script>
+        let importObject = {
+            wasi_snapshot_preview1: {
+                proc_exit: () => { },
+            },
+        };
+
+        let globes = {};
+        async function start() {
+            const module = await WebAssembly.compileStreaming(fetch("game.wasm"));
+            const { exports: { add } } = await WebAssembly.instantiate(module, {});
+            globes.add = add;
+        }
+        start();
+    </script>
+</body>
+</html>
