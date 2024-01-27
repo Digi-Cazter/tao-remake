@@ -156,16 +156,20 @@ function createGrid() {
             if (cell === 1) {
                 const tile = document.createElement('span');
                 tile.className = 'tile';
-                tile.style.left = `${(x * 50)+8}px`;
-                tile.style.top = `${(y * 50)+8}px`;
+                tile.style.left = `${(x * 50) + 8}px`;
+                tile.style.top = `${(y * 50) + 8}px`;
+
                 const overlay = document.createElement('span');
-                overlay.className = 'overlay';
+                overlay.className = 'overlay'; // Add a class for overlay
+                overlay.style.pointerEvents = 'none'; // Disable pointer events on overlay
+
                 tile.appendChild(overlay);
                 grid.appendChild(tile);
             }
         });
     });
 }
+
 
 function adjustZoom() {
     const viewportWidth = window.innerWidth;
@@ -268,22 +272,22 @@ grid.addEventListener('click', function(event) {
     const clickX = event.clientX;
     const clickY = event.clientY;
 
-    // Get the position of the grid element relative to the viewport
-    const gridRect = grid.getBoundingClientRect();
-    const gridX = gridRect.top;
-    const gridY = gridRect.left;
+    // Use document.elementFromPoint to get the element at the click position
+    const clickedElement = document.elementFromPoint(clickX, clickY);
+    console.log(clickedElement);
 
-    // Calculate the click position relative to the grid
-    const relativeClickX = clickX - gridX;
-    const relativeClickY = clickY - gridY;
+    // Check if the clicked element is a grid cell
+    if (clickedElement && clickedElement.classList.contains('tile')) {
+        // Calculate the grid coordinates based on the clicked cell's position
+        const gridCellSize = 50; // Adjust this size if needed
+        const gridXCoord = Math.floor((clickedElement.offsetLeft - 8) / gridCellSize);
+        const gridYCoord = Math.floor((clickedElement.offsetTop - 8) / gridCellSize);
 
-    // Calculate the grid coordinates based on the click position
-    const gridCellSize = 50; // Adjust this size if needed
-    const gridXCoord = Math.floor(relativeClickX / gridCellSize);
-    const gridYCoord = Math.floor(relativeClickY / gridCellSize);
-
-    // Output the grid coordinates
-    console.log(`Clicked on grid cell at X: ${gridXCoord}, Y: ${gridYCoord}`);
+        // Output the grid coordinates
+        character.targetX = gridXCoord;
+        character.targetY = gridYCoord;
+        console.log(`Clicked on grid cell at X: ${gridXCoord}, Y: ${gridYCoord}`);
+    }
 });
 
 // Initialize grid, character, and adjust zoom
