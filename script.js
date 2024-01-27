@@ -107,44 +107,48 @@ characters = {
                 'characters/valla/go_w/8.png',
             ],
         },
+        "death": {
+            "" : [
+                'characters/valla/death/01.png',
+                'characters/valla/death/02.png',
+                'characters/valla/death/03.png',
+                'characters/valla/death/04.png',
+                'characters/valla/death/05.png',
+                'characters/valla/death/06.png',
+                'characters/valla/death/07.png',
+                'characters/valla/death/08.png',
+                'characters/valla/death/09.png',
+                'characters/valla/death/10.png',
+                'characters/valla/death/11.png',
+                'characters/valla/death/12.png',
+                'characters/valla/death/13.png',
+                'characters/valla/death/14.png',
+                'characters/valla/death/15.png',
+                'characters/valla/death/16.png',
+                'characters/valla/death/17.png',
+                'characters/valla/death/18.png',
+                'characters/valla/death/19.png',
+                'characters/valla/death/20.png',
+            ]
+        }
     }
 }
-
-const characterDeathFrames = [
-    'characters/valla/death/01.png',
-    'characters/valla/death/02.png',
-    'characters/valla/death/03.png',
-    'characters/valla/death/04.png',
-    'characters/valla/death/05.png',
-    'characters/valla/death/06.png',
-    'characters/valla/death/07.png',
-    'characters/valla/death/08.png',
-    'characters/valla/death/09.png',
-    'characters/valla/death/10.png',
-    'characters/valla/death/11.png',
-    'characters/valla/death/12.png',
-    'characters/valla/death/13.png',
-    'characters/valla/death/14.png',
-    'characters/valla/death/15.png',
-    'characters/valla/death/16.png',
-    'characters/valla/death/17.png',
-    'characters/valla/death/18.png',
-    'characters/valla/death/19.png',
-    'characters/valla/death/20.png',
-];
 
 const character = {
     element: null,
     x: 0,  // X-coordinate of the tile
     y: 0,  // Y-coordinate of the tile
-    width: 50, // Default width, will be updated
-    height: 50, // Default height, will be updated
+    width: 42, // Default width, will be updated
+    height: 64, // Default height, will be updated
     animation: 'idle',
     direction: 's',
     frameIndex: 0,
-    frameRate: 120,
+    frameRate: 4,
+    frameAccumulator: 0,
     animationTimeout: null
 };
+
+window.character = character;
 
 function createGrid() {
     layout.forEach((row, y) => {
@@ -152,8 +156,8 @@ function createGrid() {
             if (cell === 1) {
                 const tile = document.createElement('span');
                 tile.className = 'tile';
-                tile.style.left = `${x * 50}px`;
-                tile.style.top = `${y * 50}px`;
+                tile.style.left = `${(x * 50)+8}px`;
+                tile.style.top = `${(y * 50)+8}px`;
                 const overlay = document.createElement('span');
                 overlay.className = 'overlay';
                 tile.appendChild(overlay);
@@ -194,42 +198,93 @@ function changeAnimation(animation, direction) {
     character.animation = animation;
     character.direction = direction;
     character.frameIndex = 0;
-    updateCharacterPosition()
 }
 
 // Game Loop
-const fps = 12;
+const fps = 60;
 let lastFrameTimeMs = 0;
 let delta = 0;
 const timestep = 1000 / fps;
+let frameCount = 0;
+let lastFpsUpdateTime = 0;
+let currentFps = 0;
 
 function gameLoop(timestamp) {
     delta += timestamp - lastFrameTimeMs;
     lastFrameTimeMs = timestamp;
 
+    // Update game state at a fixed timestep of 1/60th of a second
     while (delta >= timestep) {
         update(timestep); // Update game state
         delta -= timestep;
+
+        // Update character animation independently of game state
+        character.frameAccumulator += timestep;
+        if (character.frameAccumulator >= 1000 / character.frameRate) {
+            animateCharacter();
+            character.frameAccumulator = 0;
+        }
+        character.frameAccumulator += 1;
     }
 
     render(); // Render the game state
     requestAnimationFrame(gameLoop);
+
+    updateFpsCounter(timestamp);
+}
+
+function updateFpsCounter(currentTime) {
+    if (currentTime - lastFpsUpdateTime > 1000) { // Update every second
+        currentFps = frameCount;
+        frameCount = 0;
+        lastFpsUpdateTime = currentTime;
+        displayFps(); // Display the current FPS
+    } else {
+        frameCount++;
+    }
+}
+
+function displayFps() {
+    console.log(`Current FPS: ${currentFps}`); // Or display it in your game
 }
 
 function update(delta) {
     // Update character animation independently
-    let characterFrameAccumulator = 0;
-    characterFrameAccumulator += delta;
-    if (characterFrameAccumulator >= 1000 / character.frameRate) {
+    character.frameAccumulator += delta;
+    if (character.frameAccumulator >= 1000 / character.frameRate) {
         animateCharacter();
-        characterFrameAccumulator -= 1000 / character.frameRate;
+        character.frameAccumulator = 0;
     }
 
     // Other game updates...
 }
 
 function render() {
+    updateCharacterPosition();
 }
+
+grid.addEventListener('click', function(event) {
+    // Get the click position relative to the viewport
+    const clickX = event.clientX;
+    const clickY = event.clientY;
+
+    // Get the position of the grid element relative to the viewport
+    const gridRect = grid.getBoundingClientRect();
+    const gridX = gridRect.top;
+    const gridY = gridRect.left;
+
+    // Calculate the click position relative to the grid
+    const relativeClickX = clickX - gridX;
+    const relativeClickY = clickY - gridY;
+
+    // Calculate the grid coordinates based on the click position
+    const gridCellSize = 50; // Adjust this size if needed
+    const gridXCoord = Math.floor(relativeClickX / gridCellSize);
+    const gridYCoord = Math.floor(relativeClickY / gridCellSize);
+
+    // Output the grid coordinates
+    console.log(`Clicked on grid cell at X: ${gridXCoord}, Y: ${gridYCoord}`);
+});
 
 // Initialize grid, character, and adjust zoom
 createGrid();
