@@ -54,7 +54,59 @@ characters = {
                 'characters/valla/idle_w/5.png',
             ],
         
-        }
+        },
+        "go": {
+            "nw": [
+                'characters/valla/go_nw/1.png',
+                'characters/valla/go_nw/2.png',
+                'characters/valla/go_nw/3.png',
+                'characters/valla/go_nw/4.png',
+                'characters/valla/go_nw/5.png',
+                'characters/valla/go_nw/6.png',
+                'characters/valla/go_nw/7.png',
+                'characters/valla/go_nw/8.png',
+            ],
+            "s": [
+                'characters/valla/go_s/1.png',
+                'characters/valla/go_s/2.png',
+                'characters/valla/go_s/3.png',
+                'characters/valla/go_s/4.png',
+                'characters/valla/go_s/5.png',
+                'characters/valla/go_s/6.png',
+                'characters/valla/go_s/7.png',
+                'characters/valla/go_s/8.png',
+            ],
+            "se": [
+                'characters/valla/go_se/1.png',
+                'characters/valla/go_se/2.png',
+                'characters/valla/go_se/3.png',
+                'characters/valla/go_se/4.png',
+                'characters/valla/go_se/5.png',
+                'characters/valla/go_se/6.png',
+                'characters/valla/go_se/7.png',
+                'characters/valla/go_se/8.png',
+            ],
+            "sw": [
+                'characters/valla/go_sw/1.png',
+                'characters/valla/go_sw/2.png',
+                'characters/valla/go_sw/3.png',
+                'characters/valla/go_sw/4.png',
+                'characters/valla/go_sw/5.png',
+                'characters/valla/go_sw/6.png',
+                'characters/valla/go_sw/7.png',
+                'characters/valla/go_sw/8.png',
+            ],
+            "w": [
+                'characters/valla/go_w/1.png',
+                'characters/valla/go_w/2.png',
+                'characters/valla/go_w/3.png',
+                'characters/valla/go_w/4.png',
+                'characters/valla/go_w/5.png',
+                'characters/valla/go_w/6.png',
+                'characters/valla/go_w/7.png',
+                'characters/valla/go_w/8.png',
+            ],
+        },
     }
 }
 
