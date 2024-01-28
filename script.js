@@ -18,12 +18,19 @@ const layout = [
 characters = {
     'valla': {
         'idle': {
-            'nw': [
-                'characters/valla/idle_nw/1.png',
-                'characters/valla/idle_nw/2.png',
-                'characters/valla/idle_nw/3.png',
-                'characters/valla/idle_nw/4.png',
-                'characters/valla/idle_nw/5.png',
+            'n': [
+                'characters/valla/idle_w/1.png',
+                'characters/valla/idle_w/2.png',
+                'characters/valla/idle_w/3.png',
+                'characters/valla/idle_w/4.png',
+                'characters/valla/idle_w/5.png',
+            ],
+            'e': [
+                'characters/valla/idle_s/1.png',
+                'characters/valla/idle_s/2.png',
+                'characters/valla/idle_s/3.png',
+                'characters/valla/idle_s/4.png',
+                'characters/valla/idle_s/5.png',
             ],
             's': [
                 'characters/valla/idle_s/1.png',
@@ -31,20 +38,6 @@ characters = {
                 'characters/valla/idle_s/3.png',
                 'characters/valla/idle_s/4.png',
                 'characters/valla/idle_s/5.png',
-            ],
-            'se': [
-                'characters/valla/idle_se/1.png',
-                'characters/valla/idle_se/2.png',
-                'characters/valla/idle_se/3.png',
-                'characters/valla/idle_se/4.png',
-                'characters/valla/idle_se/5.png',
-            ],
-            'sw':[
-                'characters/valla/idle_sw/1.png',
-                'characters/valla/idle_sw/2.png',
-                'characters/valla/idle_sw/3.png',
-                'characters/valla/idle_sw/4.png',
-                'characters/valla/idle_sw/5.png',
             ],
             'w': [
                 'characters/valla/idle_w/1.png',
@@ -56,15 +49,25 @@ characters = {
         
         },
         "go": {
-            "nw": [
-                'characters/valla/go_nw/1.png',
-                'characters/valla/go_nw/2.png',
-                'characters/valla/go_nw/3.png',
-                'characters/valla/go_nw/4.png',
-                'characters/valla/go_nw/5.png',
-                'characters/valla/go_nw/6.png',
-                'characters/valla/go_nw/7.png',
-                'characters/valla/go_nw/8.png',
+            "n": [
+                'characters/valla/go_w/1.png',
+                'characters/valla/go_w/2.png',
+                'characters/valla/go_w/3.png',
+                'characters/valla/go_w/4.png',
+                'characters/valla/go_w/5.png',
+                'characters/valla/go_w/6.png',
+                'characters/valla/go_w/7.png',
+                'characters/valla/go_w/8.png',
+            ],
+            "e": [
+                'characters/valla/go_s/1.png',
+                'characters/valla/go_s/2.png',
+                'characters/valla/go_s/3.png',
+                'characters/valla/go_s/4.png',
+                'characters/valla/go_s/5.png',
+                'characters/valla/go_s/6.png',
+                'characters/valla/go_s/7.png',
+                'characters/valla/go_s/8.png',
             ],
             "s": [
                 'characters/valla/go_s/1.png',
@@ -75,26 +78,6 @@ characters = {
                 'characters/valla/go_s/6.png',
                 'characters/valla/go_s/7.png',
                 'characters/valla/go_s/8.png',
-            ],
-            "se": [
-                'characters/valla/go_se/1.png',
-                'characters/valla/go_se/2.png',
-                'characters/valla/go_se/3.png',
-                'characters/valla/go_se/4.png',
-                'characters/valla/go_se/5.png',
-                'characters/valla/go_se/6.png',
-                'characters/valla/go_se/7.png',
-                'characters/valla/go_se/8.png',
-            ],
-            "sw": [
-                'characters/valla/go_sw/1.png',
-                'characters/valla/go_sw/2.png',
-                'characters/valla/go_sw/3.png',
-                'characters/valla/go_sw/4.png',
-                'characters/valla/go_sw/5.png',
-                'characters/valla/go_sw/6.png',
-                'characters/valla/go_sw/7.png',
-                'characters/valla/go_sw/8.png',
             ],
             "w": [
                 'characters/valla/go_w/1.png',
@@ -136,8 +119,9 @@ characters = {
 
 const character = {
     element: null,
+    image: null,
     x: 0,  // X-coordinate of the tile
-    y: 0,  // Y-coordinate of the tile
+    y: 3,  // Y-coordinate of the tile
     width: 42, // Default width, will be updated
     height: 64, // Default height, will be updated
     animation: 'idle',
@@ -149,6 +133,91 @@ const character = {
 };
 
 window.character = character;
+
+function calculatePath(startX, startY, targetX, targetY) {
+    // Create a queue for BFS
+    const queue = [{ x: startX, y: startY, path: [] }];
+    const visited = new Set();
+    
+    // Define possible moves (up, down, left, right)
+    const moves = [{ dx: -1, dy: 0 }, { dx: 1, dy: 0 }, { dx: 0, dy: -1 }, { dx: 0, dy: 1 }];
+
+    while (queue.length > 0) {
+        const { x, y, path } = queue.shift();
+        
+        if (x === targetX && y === targetY) {
+            // Found the target, return the path
+            return path;
+        }
+
+        // Explore neighboring cells
+        for (const move of moves) {
+            const newX = x + move.dx;
+            const newY = y + move.dy;
+
+            // Check if the new position is within bounds and not visited
+            if (
+                newX >= 0 && newX < layout[0].length &&
+                newY >= 0 && newY < layout.length &&
+                !visited.has(`${newX}-${newY}`) &&
+                layout[newY][newX] === 1 // Ensure it's a valid grid cell
+            ) {
+                // Mark the cell as visited
+                visited.add(`${newX}-${newY}`);
+                
+                // Add the new position to the queue with the updated path
+                queue.push({ x: newX, y: newY, path: [...path, { x: newX, y: newY }] });
+            }
+        }
+    }
+
+    // If no path is found, return an empty array
+    return [];
+}
+
+function moveToTarget() {
+    targetX = character.targetX;
+    targetY = character.targetY;
+    
+    const path = calculatePath(character.x, character.y, targetX, targetY);
+
+    if (path.length === 0) {
+        // No valid path found
+        return;
+    }
+
+    let pathIndex = 0;
+
+    const nextStep = path[pathIndex];
+    if (nextStep) {
+        // Switch character animation to "walk"
+        if (character.animation !== "go") {
+            changeAnimation("go", getDirection(character.x, character.y, targetX, targetY));
+        }
+        character.x = nextStep.x;
+        character.y = nextStep.y;
+        updateCharacterPosition();
+        pathIndex++;
+    } else {
+        // Switch character animation back to "idle" once reached the target
+        changeAnimation("idle", getDirection(character.x, character.y, targetX, targetY));
+    }
+}
+
+function getDirection(startX, startY, targetX, targetY) {
+    // Determine the direction based on the change in coordinates
+    if (targetX < startX) {
+        return "w"; // Character is moving west
+    } else if (targetX > startX) {
+        return "e"; // Character is moving east
+    } else if (targetY < startY) {
+        return "n"; // Character is moving north
+    } else if (targetY > startY) {
+        return "s"; // Character is moving south
+    } else {
+        return character.direction; // Maintain the current direction if not moving
+    }
+}
 
 function createGrid() {
     layout.forEach((row, y) => {
@@ -169,7 +238,6 @@ function createGrid() {
         });
     });
 }
-
 
 function adjustZoom() {
     const viewportWidth = window.innerWidth;
@@ -196,11 +264,25 @@ function animateCharacter() {
     const frames = characters.valla[character.animation][character.direction];
     character.element.src = frames[character.frameIndex % frames.length];
     character.frameIndex++;
+
+    var img = new Image();
+    img.src = character.element.src;
+    img.onload = function(){
+        character.width = img.width;
+        character.height = img.height;
+        character.element.style.width = `${character.width}px`;
+        character.element.style.height = `${character.height*2}px`;
+    }
 }
 
 function changeAnimation(animation, direction) {
     character.animation = animation;
     character.direction = direction;
+    if (character.direction == 'n' || character.direction == 'e') {
+        character.element.style.transform = 'rotateY(180deg) rotate(45deg)';
+    } else {
+        character.element.style.transform = '';
+    }
     character.frameIndex = 0;
 }
 
@@ -226,6 +308,7 @@ function gameLoop(timestamp) {
         character.frameAccumulator += timestep;
         if (character.frameAccumulator >= 1000 / character.frameRate) {
             animateCharacter();
+            moveToTarget();
             character.frameAccumulator = 0;
         }
         character.frameAccumulator += 1;
@@ -242,7 +325,7 @@ function updateFpsCounter(currentTime) {
         currentFps = frameCount;
         frameCount = 0;
         lastFpsUpdateTime = currentTime;
-        displayFps(); // Display the current FPS
+        // displayFps(); // Display the current FPS
     } else {
         frameCount++;
     }
@@ -287,6 +370,7 @@ grid.addEventListener('click', function(event) {
         character.targetX = gridXCoord;
         character.targetY = gridYCoord;
         console.log(`Clicked on grid cell at X: ${gridXCoord}, Y: ${gridYCoord}`);
+        moveToTarget(gridXCoord, gridYCoord);
     }
 });
 
