@@ -73,6 +73,58 @@ body {
     }
 }
 
+@keyframes walkWest {
+	0% {
+    	transform: translateX(0) rotate(-45deg);
+  	}
+ 	100% {
+    	transform: translateX(-50px) rotate(-45deg);
+    }
+}
+
+@keyframes walkEast {
+	0% {
+    	transform: translateX(0) rotateY(180deg) rotate(45deg);
+  	}
+ 	100% {
+    	transform: translateX(50px) rotateY(180deg) rotate(45deg);
+    }
+}
+
+@keyframes walkSouth {
+	0% {
+    	transform: translateY(0) rotate(-45deg);
+  	}
+ 	100% {
+    	transform: translateY(50px) rotate(-45deg);
+    }
+}
+
+@keyframes walkNorth {
+	0% {
+    	transform: translateY(0) rotateY(-180deg) rotate(45deg);
+  	}
+ 	100% {
+    	transform: translateY(-50px) rotateY(-180deg) rotate(45deg);
+    }
+}
+
+.walkN {
+    animation: walkNorth 1.5s linear forwards;
+}
+
+.walkS {
+    animation: walkSouth 1.5s linear forwards;
+}
+
+.walkE {
+    animation: walkEast 1.5s linear forwards;
+}
+
+.walkW {
+    animation: walkWest 1.5s linear forwards;
+}
+
 .character {
     /* Previous styles */
     /* Transformations for isometric alignment */
